@@ -20,15 +20,16 @@ export async function GET(
         const giftCards = await giftCardService.listGiftCards({ id })
         
         if (giftCards.length === 0) {
-            return res.status(404).json({
+            res.status(404).json({
                 message: "Gift card not found",
             })
+            return
         }
 
-        return res.json({ gift_card: giftCards[0] })
+        res.json({ gift_card: giftCards[0] })
     } catch (error) {
         console.error("Error fetching gift card:", error)
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to fetch gift card",
         })
     }
@@ -50,9 +51,10 @@ export async function POST(
     const { customer_id } = req.body
 
     if (!customer_id) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "customer_id is required",
         })
+        return
     }
 
     const giftCardService = req.scope.resolve<GiftCardModuleService>(
@@ -63,28 +65,30 @@ export async function POST(
         const giftCards = await giftCardService.listGiftCards({ id })
         
         if (giftCards.length === 0) {
-            return res.status(404).json({
+            res.status(404).json({
                 message: "Gift card not found",
             })
+            return
         }
 
         const giftCard = giftCards[0]
         
         if (giftCard.status === "redeemed") {
-            return res.status(400).json({
+            res.status(400).json({
                 message: "Gift card has already been redeemed",
             })
+            return
         }
 
         await giftCardService.redeemGiftCard(giftCard.code, customer_id)
 
-        return res.json({
+        res.json({
             message: "Gift card redeemed successfully",
             gift_card: await giftCardService.listGiftCards({ id }).then(cards => cards[0]),
         })
     } catch (error) {
         console.error("Error redeeming gift card:", error)
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to redeem gift card",
         })
     }

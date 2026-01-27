@@ -13,13 +13,14 @@ type QueryParams = {
 export async function GET(
     req: MedusaRequest<unknown, QueryParams>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { code } = req.query as QueryParams
 
     if (!code) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "code is required",
         })
+        return
     }
 
     const giftCardService = req.scope.resolve<GiftCardModuleService>(
@@ -30,15 +31,16 @@ export async function GET(
         const giftCards = await giftCardService.listGiftCards({ code })
         
         if (giftCards.length === 0) {
-            return res.status(404).json({
+            res.status(404).json({
                 message: "Gift card not found",
             })
+            return
         }
 
         const giftCard = giftCards[0]
 
         // Return limited information (don't expose full details)
-        return res.json({
+        res.json({
             code: giftCard.code,
             value: giftCard.value,
             currency_code: giftCard.currency_code,
@@ -47,7 +49,7 @@ export async function GET(
         })
     } catch (error) {
         console.error("Error fetching gift card:", error)
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to fetch gift card",
         })
     }

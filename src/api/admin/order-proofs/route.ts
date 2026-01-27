@@ -20,7 +20,8 @@ export async function POST(
     const { order_id, proof_image_url, status, customer_notes, admin_notes, metadata } = req.body
 
     if (!proof_image_url) {
-        return res.status(400).json({ error: "proof_image_url is required" });
+        res.status(400).json({ error: "proof_image_url is required" });
+        return;
     }
 
     const proof = await orderProofService.upsertProof({
