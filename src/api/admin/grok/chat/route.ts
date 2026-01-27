@@ -29,10 +29,13 @@ export async function POST(
     }
 
     // Convert single message to messages array if needed
-    const chatMessages = messages || [
+    const chatMessages: Array<{
+      role: 'user' | 'assistant' | 'system';
+      content: string;
+    }> = messages || [
       {
         role: 'user' as const,
-        content: message,
+        content: message || '',
       },
     ];
 
