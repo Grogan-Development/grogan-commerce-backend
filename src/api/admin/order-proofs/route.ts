@@ -21,10 +21,10 @@ export async function POST(
 
     const proof = await orderProofService.upsertProof({
         order_id,
-        proof_image_url,
-        status,
-        customer_notes,
-        admin_notes,
+        proof_image_url: proof_image_url || undefined,
+        status: status as "pending" | "approved" | "revision_requested" | undefined,
+        customer_notes: customer_notes || undefined,
+        admin_notes: admin_notes || undefined,
         metadata,
     })
 

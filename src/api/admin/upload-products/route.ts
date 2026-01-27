@@ -1,8 +1,12 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http";
-import uploadProducts from "../../scripts/upload-products";
+import uploadProducts from "../../../scripts/upload-products";
+
+interface UploadProductsRequestBody {
+    dryRun?: boolean;
+}
 
 export async function POST(
-  req: MedusaRequest,
+  req: MedusaRequest<UploadProductsRequestBody>,
   res: MedusaResponse
 ): Promise<void> {
   try {

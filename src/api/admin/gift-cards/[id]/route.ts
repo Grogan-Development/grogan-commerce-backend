@@ -7,9 +7,9 @@ import GiftCardModuleService from "../../../../modules/gift-card/service"
  * Get a specific gift card by ID
  */
 export async function GET(
-    req: MedusaRequest<{ id: string }>,
+    req: MedusaRequest<unknown, unknown, { id: string }>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { id } = req.params
 
     const giftCardService = req.scope.resolve<GiftCardModuleService>(

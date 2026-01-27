@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { WHOLESALE_INQUIRY_MODULE } from "../../../modules/wholesale-inquiry"
+import WholesaleInquiryModuleService from "../../../modules/wholesale-inquiry/service"
 import { sendWholesaleConfirmationWorkflow } from "../../../workflows/send-wholesale-confirmation"
 
 interface WholesaleInquiryRequestBody {
@@ -17,19 +18,19 @@ export async function POST(
     req: MedusaRequest<WholesaleInquiryRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
-    const wholesaleInquiryService = req.scope.resolve(WHOLESALE_INQUIRY_MODULE)
+    const wholesaleInquiryService = req.scope.resolve<WholesaleInquiryModuleService>(WHOLESALE_INQUIRY_MODULE)
 
     const { name, company, email, phone, quantity, productType, timeline, message } = req.body
 
     const inquiry = await wholesaleInquiryService.createWholesaleInquiries({
         name,
-        company: company || null,
+        company: company || undefined,
         email,
-        phone: phone || null,
+        phone: phone || undefined,
         quantity,
         product_type: productType,
-        timeline,
-        message: message || null,
+        timeline: timeline || undefined,
+        message: message || undefined,
         status: "pending",
     })
 
@@ -56,7 +57,7 @@ export async function GET(
     req: MedusaRequest,
     res: MedusaResponse
 ): Promise<void> {
-    const wholesaleInquiryService = req.scope.resolve(WHOLESALE_INQUIRY_MODULE)
+    const wholesaleInquiryService = req.scope.resolve<WholesaleInquiryModuleService>(WHOLESALE_INQUIRY_MODULE)
 
     const inquiries = await wholesaleInquiryService.listWholesaleInquiries()
 

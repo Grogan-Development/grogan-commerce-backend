@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { QUOTE_REQUEST_MODULE } from "../../../modules/quote-request"
+import QuoteRequestModuleService from "../../../modules/quote-request/service"
 import { sendQuoteConfirmationWorkflow } from "../../../workflows/send-quote-confirmation"
 
 interface QuoteRequestRequestBody {
@@ -18,7 +19,7 @@ export async function POST(
     req: MedusaRequest<QuoteRequestRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
-    const quoteRequestService = req.scope.resolve(QUOTE_REQUEST_MODULE)
+    const quoteRequestService = req.scope.resolve<QuoteRequestModuleService>(QUOTE_REQUEST_MODULE)
 
     const { name, email, phone, company, quantity, productType, occasion, message, deadline } = req.body
 
@@ -57,7 +58,7 @@ export async function GET(
     req: MedusaRequest,
     res: MedusaResponse
 ): Promise<void> {
-    const quoteRequestService = req.scope.resolve(QUOTE_REQUEST_MODULE)
+    const quoteRequestService = req.scope.resolve<QuoteRequestModuleService>(QUOTE_REQUEST_MODULE)
 
     const quoteRequests = await quoteRequestService.listQuoteRequests()
 

@@ -53,14 +53,19 @@ export async function GET(
     }
 }
 
+interface RedeemGiftCardRequestBody {
+    code: string;
+    customer_id: string;
+}
+
 /**
  * POST /store/gift-cards/redeem
  * Redeem a gift card code and add to store credit
  */
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<RedeemGiftCardRequestBody>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { code, customer_id } = req.body
 
     if (!code || !customer_id) {
