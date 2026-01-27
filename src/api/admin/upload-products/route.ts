@@ -20,7 +20,7 @@ export async function POST(
     }
 
     // Execute the upload script in the backend context
-    await uploadProducts.default({
+    await uploadProducts({
       container: req.scope,
     });
 
