@@ -71,9 +71,10 @@ export async function POST(
     const { code, customer_id } = req.body
 
     if (!code || !customer_id) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "code and customer_id are required",
         })
+        return
     }
 
     const giftCardService = req.scope.resolve<GiftCardModuleService>(
