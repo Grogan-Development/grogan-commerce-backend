@@ -145,5 +145,4 @@ export class GrokService {
   }
 }
 
-export { GrokService };
 export default GrokService;

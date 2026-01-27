@@ -1,5 +1,5 @@
 import { MedusaRequest, MedusaResponse } from '@medusajs/framework/http';
-import { GrokService } from '../../../services';
+import GrokService from '../../../services/grok-service.js';
 import { Logger } from '@medusajs/framework/types';
 
 interface GrokChatRequestBody {
