@@ -15,7 +15,7 @@ type WorkflowInput = {
 export const sendGiftCardEmailWorkflow = createWorkflow(
     "send-gift-card-email",
     (input: WorkflowInput) => {
-        return sendNotificationsStep({
+        sendNotificationsStep({
             to: input.customer_email,
             channel: "email",
             content: {

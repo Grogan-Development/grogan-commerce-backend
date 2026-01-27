@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ORDER_PROOF_MODULE } from "../../../modules/order-proof"
+import OrderProofModuleService from "../../../modules/order-proof/service"
 
 interface OrderProofRequestBody {
     order_id: string;
@@ -14,7 +15,7 @@ export async function POST(
     req: MedusaRequest<OrderProofRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
-    const orderProofService = req.scope.resolve(ORDER_PROOF_MODULE)
+    const orderProofService = req.scope.resolve<OrderProofModuleService>(ORDER_PROOF_MODULE)
 
     const { order_id, proof_image_url, status, customer_notes, admin_notes, metadata } = req.body
 
@@ -34,7 +35,7 @@ export async function GET(
     req: MedusaRequest,
     res: MedusaResponse
 ): Promise<void> {
-    const orderProofService = req.scope.resolve(ORDER_PROOF_MODULE)
+    const orderProofService = req.scope.resolve<OrderProofModuleService>(ORDER_PROOF_MODULE)
 
     const { order_id } = req.query
 
@@ -47,11 +48,17 @@ export async function GET(
     }
 }
 
+interface UpdateOrderProofRequestBody {
+    status?: string;
+    customer_notes?: string;
+    admin_notes?: string;
+}
+
 export async function PATCH(
-    req: MedusaRequest,
+    req: MedusaRequest<UpdateOrderProofRequestBody, unknown, { id: string }>,
     res: MedusaResponse
 ): Promise<void> {
-    const orderProofService = req.scope.resolve(ORDER_PROOF_MODULE)
+    const orderProofService = req.scope.resolve<OrderProofModuleService>(ORDER_PROOF_MODULE)
 
     const { id } = req.params
     const { status, customer_notes, admin_notes } = req.body

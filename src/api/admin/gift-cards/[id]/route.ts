@@ -45,7 +45,7 @@ interface RedeemGiftCardRequestBody {
 export async function POST(
     req: MedusaRequest<RedeemGiftCardRequestBody, unknown, { id: string }>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { id } = req.params
     const { customer_id } = req.body
 

@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { NEWSLETTER_SUBSCRIPTION_MODULE } from "../../../modules/newsletter-subscription"
+import NewsletterSubscriptionModuleService from "../../../modules/newsletter-subscription/service"
 import { sendNewsletterWelcomeWorkflow } from "../../../workflows/send-newsletter-welcome"
 
 interface NewsletterSubscriptionRequestBody {
@@ -10,7 +11,7 @@ export async function POST(
     req: MedusaRequest<NewsletterSubscriptionRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
-    const newsletterService = req.scope.resolve(NEWSLETTER_SUBSCRIPTION_MODULE)
+    const newsletterService = req.scope.resolve<NewsletterSubscriptionModuleService>(NEWSLETTER_SUBSCRIPTION_MODULE)
 
     const { email } = req.body
 
@@ -37,7 +38,7 @@ export async function GET(
     req: MedusaRequest,
     res: MedusaResponse
 ): Promise<void> {
-    const newsletterService = req.scope.resolve(NEWSLETTER_SUBSCRIPTION_MODULE)
+    const newsletterService = req.scope.resolve<NewsletterSubscriptionModuleService>(NEWSLETTER_SUBSCRIPTION_MODULE)
 
     const subscriptions = await newsletterService.listNewsletterSubscriptions()
 

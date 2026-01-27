@@ -44,7 +44,7 @@ export async function GET(
 interface GiftCardRequestBody {
     value: number;
     currency_code?: string;
-    type: string;
+    type: "digital" | "physical";
     customer_id?: string;
     engraving_text?: string;
     engraving_metadata?: any;

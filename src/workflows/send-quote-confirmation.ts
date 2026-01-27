@@ -11,7 +11,7 @@ type WorkflowInput = {
 export const sendQuoteConfirmationWorkflow = createWorkflow(
     "send-quote-confirmation",
     (input: WorkflowInput) => {
-        return sendNotificationsStep({
+        sendNotificationsStep({
             to: input.email,
             channel: "email",
             content: {

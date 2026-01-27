@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { CONTACT_SUBMISSION_MODULE } from "../../../modules/contact-submission"
+import ContactSubmissionModuleService from "../../../modules/contact-submission/service"
 import { sendContactConfirmationWorkflow } from "../../../workflows/send-contact-confirmation"
 
 interface ContactSubmissionRequestBody {
@@ -14,7 +15,7 @@ export async function POST(
     req: MedusaRequest<ContactSubmissionRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
-    const contactSubmissionService = req.scope.resolve(CONTACT_SUBMISSION_MODULE)
+    const contactSubmissionService = req.scope.resolve<ContactSubmissionModuleService>(CONTACT_SUBMISSION_MODULE)
 
     const { name, email, phone, subject, message } = req.body
 
@@ -48,7 +49,7 @@ export async function GET(
     req: MedusaRequest,
     res: MedusaResponse
 ): Promise<void> {
-    const contactSubmissionService = req.scope.resolve(CONTACT_SUBMISSION_MODULE)
+    const contactSubmissionService = req.scope.resolve<ContactSubmissionModuleService>(CONTACT_SUBMISSION_MODULE)
 
     const submissions = await contactSubmissionService.listContactSubmissions()
 

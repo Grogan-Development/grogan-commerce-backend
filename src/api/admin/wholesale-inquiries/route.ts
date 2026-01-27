@@ -2,8 +2,19 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { WHOLESALE_INQUIRY_MODULE } from "../../../modules/wholesale-inquiry"
 import { sendWholesaleConfirmationWorkflow } from "../../../workflows/send-wholesale-confirmation"
 
+interface WholesaleInquiryRequestBody {
+    name: string;
+    company?: string;
+    email: string;
+    phone?: string;
+    quantity: string;
+    productType: string;
+    timeline?: string;
+    message?: string;
+}
+
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<WholesaleInquiryRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
     const wholesaleInquiryService = req.scope.resolve(WHOLESALE_INQUIRY_MODULE)

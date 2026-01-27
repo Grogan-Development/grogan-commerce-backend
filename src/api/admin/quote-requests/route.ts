@@ -2,8 +2,20 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { QUOTE_REQUEST_MODULE } from "../../../modules/quote-request"
 import { sendQuoteConfirmationWorkflow } from "../../../workflows/send-quote-confirmation"
 
+interface QuoteRequestRequestBody {
+    name: string;
+    email: string;
+    phone?: string;
+    company?: string;
+    quantity: string;
+    productType: string;
+    occasion?: string;
+    message?: string;
+    deadline?: string;
+}
+
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<QuoteRequestRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
     const quoteRequestService = req.scope.resolve(QUOTE_REQUEST_MODULE)
