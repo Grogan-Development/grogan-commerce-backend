@@ -4,7 +4,7 @@ import OrderProofModuleService from "../../../modules/order-proof/service"
 
 interface OrderProofRequestBody {
     order_id: string;
-    proof_image_url?: string;
+    proof_image_url: string;
     status?: string;
     customer_notes?: string;
     admin_notes?: string;
@@ -19,9 +19,13 @@ export async function POST(
 
     const { order_id, proof_image_url, status, customer_notes, admin_notes, metadata } = req.body
 
+    if (!proof_image_url) {
+        return res.status(400).json({ error: "proof_image_url is required" });
+    }
+
     const proof = await orderProofService.upsertProof({
         order_id,
-        proof_image_url: proof_image_url || undefined,
+        proof_image_url,
         status: status as "pending" | "approved" | "revision_requested" | undefined,
         customer_notes: customer_notes || undefined,
         admin_notes: admin_notes || undefined,
