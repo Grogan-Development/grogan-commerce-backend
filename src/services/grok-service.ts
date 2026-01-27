@@ -135,9 +135,14 @@ export class GrokService {
   /**
    * Calculate API cost for a request
    */
+  /**
+   * Calculate API cost for a request
+   */
   private calculateCost(inputTokens: number, outputTokens: number): number {
     const inputCost = (inputTokens / 1_000_000) * this.inputCostPerMillion;
     const outputCost = (outputTokens / 1_000_000) * this.outputCostPerMillion;
     return inputCost + outputCost;
   }
 }
+
+export default GrokService;
