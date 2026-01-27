@@ -7,7 +7,7 @@ import GiftCardModuleService from "../../../../modules/gift-card/service"
  * Get a specific gift card by ID
  */
 export async function GET(
-    req: MedusaRequest<unknown, unknown, { id: string }>,
+    req: MedusaRequest,
     res: MedusaResponse
 ): Promise<void> {
     const { id } = req.params
@@ -44,7 +44,7 @@ interface RedeemGiftCardRequestBody {
  * Admin redeem a gift card for a customer
  */
 export async function POST(
-    req: MedusaRequest<RedeemGiftCardRequestBody, unknown, { id: string }>,
+    req: MedusaRequest<RedeemGiftCardRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
     const { id } = req.params

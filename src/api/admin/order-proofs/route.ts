@@ -60,7 +60,7 @@ interface UpdateOrderProofRequestBody {
 }
 
 export async function PATCH(
-    req: MedusaRequest<UpdateOrderProofRequestBody, unknown, { id: string }>,
+    req: MedusaRequest<UpdateOrderProofRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
     const orderProofService = req.scope.resolve<OrderProofModuleService>(ORDER_PROOF_MODULE)
