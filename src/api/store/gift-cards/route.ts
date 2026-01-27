@@ -84,7 +84,7 @@ export async function POST(
         const giftCard = await giftCardService.redeemGiftCard(code, customer_id)
         const storeCredit = await giftCardService.getStoreCredit(customer_id)
 
-        return res.json({
+        res.json({
             message: "Gift card redeemed successfully",
             gift_card: {
                 code: giftCard.code,
@@ -96,18 +96,20 @@ export async function POST(
         console.error("Error redeeming gift card:", error)
         
         if (error.type === "not_found") {
-            return res.status(404).json({
+            res.status(404).json({
                 message: error.message || "Gift card not found",
             })
+            return
         }
         
         if (error.type === "invalid_data") {
-            return res.status(400).json({
+            res.status(400).json({
                 message: error.message || "Invalid gift card",
             })
+            return
         }
 
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to redeem gift card",
         })
     }
