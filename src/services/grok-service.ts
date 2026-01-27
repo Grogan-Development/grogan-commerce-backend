@@ -1,5 +1,5 @@
 import { xai } from '@ai-sdk/xai';
-import { generateText, GenerateTextResult } from 'ai';
+import { generateText } from 'ai';
 import { Logger } from '@medusajs/framework/types';
 
 interface ChatMessage {
@@ -34,11 +34,18 @@ export class GrokService {
 
   constructor(container: { logger: Logger }) {
     this.logger = container.logger;
-    this.apiKey = process.env.GROK_API_KEY || '';
+    this.apiKey = process.env.GROK_API_KEY || process.env.XAI_API_KEY || '';
     this.model = process.env.GROK_MODEL || 'grok-4-1-fast-reasoning';
 
+    // Set XAI_API_KEY for @ai-sdk/xai if we have GROK_API_KEY
+    if (this.apiKey && !process.env.XAI_API_KEY) {
+      process.env.XAI_API_KEY = this.apiKey;
+    }
+
     if (!this.apiKey) {
-      this.logger.warn('Grok API key not configured. Set GROK_API_KEY environment variable.');
+      this.logger.warn('Grok API key not configured. Set GROK_API_KEY or XAI_API_KEY environment variable.');
+    } else {
+      this.logger.info('Grok service initialized with model: ' + this.model);
     }
   }
 
@@ -65,15 +72,19 @@ export class GrokService {
       const prompt = lastUserMessage.content;
 
       // Call Grok API
+      // Note: The xai provider reads API key from XAI_API_KEY environment variable
+      // We set it from GROK_API_KEY for consistency
+      if (!process.env.XAI_API_KEY && this.apiKey) {
+        process.env.XAI_API_KEY = this.apiKey;
+      }
+
       // Note: For images, we'll need to use the messages format with content array
       // For now, supporting text-only. Images can be added later with proper format.
-      // The xai provider reads API key from XAI_API_KEY env var or can be passed in options
-      const result: GenerateTextResult = await generateText({
-        model: xai(this.model, {
-          apiKey: this.apiKey,
-        }),
+      const result = await generateText({
+        model: xai(this.model),
         prompt: prompt,
-        tools: options.tools,
+        // Tools support will be added in future update
+        // tools: options.tools,
         // Images support will be added in future update
         // The @ai-sdk/xai package supports images via the messages format
       });
