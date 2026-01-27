@@ -2,8 +2,17 @@ import { MedusaRequest, MedusaResponse } from '@medusajs/framework/http';
 import { GrokService } from '../../../services/grok-service.js';
 import { Logger } from '@medusajs/framework/types';
 
+interface GrokChatRequestBody {
+  message?: string;
+  messages?: Array<{
+    role: 'user' | 'assistant' | 'system';
+    content: string;
+  }>;
+  images?: string[];
+}
+
 export async function POST(
-  req: MedusaRequest,
+  req: MedusaRequest<GrokChatRequestBody>,
   res: MedusaResponse
 ): Promise<void> {
   const logger: Logger = req.scope.resolve('logger');
