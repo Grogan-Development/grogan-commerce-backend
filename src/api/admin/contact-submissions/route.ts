@@ -2,8 +2,16 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { CONTACT_SUBMISSION_MODULE } from "../../../modules/contact-submission"
 import { sendContactConfirmationWorkflow } from "../../../workflows/send-contact-confirmation"
 
+interface ContactSubmissionRequestBody {
+    name: string;
+    email: string;
+    phone?: string;
+    subject: string;
+    message: string;
+}
+
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<ContactSubmissionRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
     const contactSubmissionService = req.scope.resolve(CONTACT_SUBMISSION_MODULE)

@@ -41,12 +41,21 @@ export async function GET(
     }
 }
 
+interface GiftCardRequestBody {
+    value: number;
+    currency_code?: string;
+    type: string;
+    customer_id?: string;
+    engraving_text?: string;
+    engraving_metadata?: any;
+}
+
 /**
  * POST /admin/gift-cards
  * Create a gift card manually (admin only)
  */
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<GiftCardRequestBody>,
     res: MedusaResponse
 ) {
     const {

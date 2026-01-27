@@ -1,8 +1,17 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ORDER_PROOF_MODULE } from "../../../modules/order-proof"
 
+interface OrderProofRequestBody {
+    order_id: string;
+    proof_image_url?: string;
+    status?: string;
+    customer_notes?: string;
+    admin_notes?: string;
+    metadata?: any;
+}
+
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<OrderProofRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
     const orderProofService = req.scope.resolve(ORDER_PROOF_MODULE)

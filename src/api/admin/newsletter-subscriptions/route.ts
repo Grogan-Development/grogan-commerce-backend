@@ -2,8 +2,12 @@ import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { NEWSLETTER_SUBSCRIPTION_MODULE } from "../../../modules/newsletter-subscription"
 import { sendNewsletterWelcomeWorkflow } from "../../../workflows/send-newsletter-welcome"
 
+interface NewsletterSubscriptionRequestBody {
+    email: string;
+}
+
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<NewsletterSubscriptionRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
     const newsletterService = req.scope.resolve(NEWSLETTER_SUBSCRIPTION_MODULE)

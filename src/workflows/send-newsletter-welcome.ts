@@ -8,7 +8,7 @@ type WorkflowInput = {
 export const sendNewsletterWelcomeWorkflow = createWorkflow(
     "send-newsletter-welcome",
     (input: WorkflowInput) => {
-        sendNotificationsStep({
+        return sendNotificationsStep({
             to: input.email,
             channel: "email",
             content: {

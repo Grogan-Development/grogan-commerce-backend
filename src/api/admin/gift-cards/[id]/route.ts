@@ -34,12 +34,16 @@ export async function GET(
     }
 }
 
+interface RedeemGiftCardRequestBody {
+    customer_id: string;
+}
+
 /**
  * POST /admin/gift-cards/:id/redeem
  * Admin redeem a gift card for a customer
  */
 export async function POST(
-    req: MedusaRequest<{ id: string }>,
+    req: MedusaRequest<RedeemGiftCardRequestBody, unknown, { id: string }>,
     res: MedusaResponse
 ) {
     const { id } = req.params

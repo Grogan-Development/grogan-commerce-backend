@@ -12,7 +12,7 @@ type WorkflowInput = {
 export const sendWholesaleConfirmationWorkflow = createWorkflow(
     "send-wholesale-confirmation",
     (input: WorkflowInput) => {
-        sendNotificationsStep({
+        return sendNotificationsStep({
             to: input.email,
             channel: "email",
             content: {
