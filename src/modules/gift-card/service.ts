@@ -120,7 +120,8 @@ class GiftCardModuleService extends MedusaService({
         }
 
         // Mark gift card as redeemed
-        await this.updateGiftCards(giftCard.id, {
+        await this.updateGiftCards({
+            id: giftCard.id,
             status: "redeemed",
             redeemed_at: new Date(),
             redeemed_by_customer_id: customerId,
