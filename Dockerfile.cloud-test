@@ -1,0 +1,42 @@
+# Test Dockerfile that matches Medusa Cloud build environment
+# Based on build logs from Medusa Cloud deployments
+
+# syntax=docker/dockerfile:1
+
+# Base stage
+FROM public.ecr.aws/docker/library/node:20.20.0-slim AS base
+
+RUN apt-get update && apt-get install -y curl procps && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /base
+
+COPY package.json package-lock.json .npmrc* ./
+
+# Build stage
+FROM base AS build
+
+RUN apt-get update && apt-get install -y jq && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+
+COPY --from=base /base ./
+
+# Install dependencies
+RUN npm ci --no-audit
+
+# Copy source code
+COPY . .
+
+# Build with production environment
+RUN NODE_ENV=production npm run build
+
+# Final stage (for testing, we'll just verify the build succeeded)
+# The build step above already verified npm run build succeeded
+FROM build AS final
+
+WORKDIR /build
+
+# List build outputs for verification
+RUN echo "Build outputs:" && ls -la .medusa/ 2>/dev/null || echo "No .medusa directory found"
+
+CMD ["echo", "✓ Cloud build test passed - npm run build completed successfully"]
