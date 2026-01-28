@@ -1,5 +1,6 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ORDER_PROOF_MODULE } from "../../../modules/order-proof"
+import OrderProofModuleService from "../../../modules/order-proof/service"
 
 /**
  * Store API route for customers to view and approve proofs
@@ -8,7 +9,7 @@ export async function GET(
     req: MedusaRequest,
     res: MedusaResponse
 ): Promise<void> {
-    const orderProofService = req.scope.resolve(ORDER_PROOF_MODULE)
+    const orderProofService = req.scope.resolve<OrderProofModuleService>(ORDER_PROOF_MODULE)
 
     const { order_id } = req.query
 
@@ -28,14 +29,20 @@ export async function GET(
     res.json({ order_proof: proof })
 }
 
+interface OrderProofActionRequestBody {
+    order_id: string;
+    action: string;
+    customer_notes?: string;
+}
+
 /**
  * Store API route for customers to approve or request revision
  */
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<OrderProofActionRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
-    const orderProofService = req.scope.resolve(ORDER_PROOF_MODULE)
+    const orderProofService = req.scope.resolve<OrderProofModuleService>(ORDER_PROOF_MODULE)
 
     const { order_id, action, customer_notes } = req.body
 

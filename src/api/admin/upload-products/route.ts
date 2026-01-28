@@ -22,6 +22,7 @@ export async function POST(
     // Execute the upload script in the backend context
     await uploadProducts({
       container: req.scope,
+      args: [],
     });
 
     res.json({

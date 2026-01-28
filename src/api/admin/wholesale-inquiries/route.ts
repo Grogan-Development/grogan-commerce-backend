@@ -40,7 +40,7 @@ export async function POST(
             input: {
                 email,
                 name,
-                company: company || null,
+                company: company || undefined,
                 quantity,
                 product_type: productType,
             },

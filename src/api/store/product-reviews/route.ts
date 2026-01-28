@@ -15,13 +15,14 @@ type QueryParams = {
 export async function GET(
     req: MedusaRequest<unknown, QueryParams>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { product_id, approved_only } = req.query as QueryParams
 
     if (!product_id) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "product_id is required",
         })
+        return
     }
 
     const reviewService = req.scope.resolve<ProductReviewModuleService>(
@@ -36,17 +37,26 @@ export async function GET(
         const averageRating = await reviewService.getAverageRating(product_id)
         const reviewCount = await reviewService.getReviewCount(product_id)
 
-        return res.json({
+        res.json({
             reviews,
             average_rating: averageRating,
             review_count: reviewCount,
         })
     } catch (error) {
         console.error("Error fetching reviews:", error)
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to fetch reviews",
         })
     }
+}
+
+interface ProductReviewRequestBody {
+    product_id: string;
+    customer_id?: string;
+    order_id?: string;
+    rating: number;
+    title?: string;
+    comment?: string;
 }
 
 /**
@@ -54,21 +64,23 @@ export async function GET(
  * Create a new product review
  */
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<ProductReviewRequestBody>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { product_id, customer_id, order_id, rating, title, comment } = req.body
 
     if (!product_id || !rating) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "product_id and rating are required",
         })
+        return
     }
 
     if (rating < 1 || rating > 5) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "rating must be between 1 and 5",
         })
+        return
     }
 
     const reviewService = req.scope.resolve<ProductReviewModuleService>(
@@ -87,10 +99,10 @@ export async function POST(
             helpful_count: 0,
         })
 
-        return res.status(201).json({ review })
+        res.status(201).json({ review })
     } catch (error) {
         console.error("Error creating review:", error)
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to create review",
         })
     }
