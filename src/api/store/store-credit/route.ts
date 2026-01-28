@@ -54,9 +54,10 @@ export async function POST(
     const { customer_id, cart_id, amount } = req.body
 
     if (!customer_id || amount === undefined) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "customer_id and amount are required",
         })
+        return
     }
 
     const giftCardService = req.scope.resolve<GiftCardModuleService>(
@@ -69,9 +70,10 @@ export async function POST(
         const amountToApply = Math.min(amountInCents, balance)
 
         if (amountToApply <= 0 || balance <= 0) {
-            return res.status(400).json({
+            res.status(400).json({
                 message: "Insufficient store credit balance",
             })
+            return
         }
 
         // If cart_id is provided, store the applied amount in cart metadata
