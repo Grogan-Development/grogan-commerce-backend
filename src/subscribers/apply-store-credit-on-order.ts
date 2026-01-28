@@ -10,14 +10,13 @@ import GiftCardModuleService from "../modules/gift-card/service"
  * Deducts the store credit balance that was applied to the cart
  */
 export default async function applyStoreCreditOnOrderSubscriber({
-    data,
-    eventName,
+    event: { data },
     container,
-}: SubscriberArgs<Record<string, any>>) {
+}: SubscriberArgs<{ id: string }>) {
     const giftCardService = container.resolve<GiftCardModuleService>(
         GIFT_CARD_MODULE
     )
-    const orderService = container.resolve("orderService")
+    const orderService = container.resolve<{ retrieve: (id: string, options?: any) => Promise<any> }>("orderService")
 
     try {
         // Retrieve the order

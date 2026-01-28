@@ -7,7 +7,7 @@ type InjectedDependencies = {
 
 class NotionService {
     protected notion: Client
-    protected databaseId: string
+    protected databaseId: string | undefined
     protected logger?: Logger
 
     constructor(container: InjectedDependencies = {}) {

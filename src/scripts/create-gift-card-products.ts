@@ -13,7 +13,7 @@ async function createGiftCardProducts() {
         title: "Digital Gift Card",
         description: "Give the gift of choice with a digital gift card. Perfect for any occasion! This gift card does not expire and has no fees.",
         handle: "digital-gift-card",
-        status: "published",
+        status: ProductStatus.PUBLISHED,
         metadata: {
             is_gift_card: true,
             gift_card_type: "digital",
@@ -67,7 +67,7 @@ async function createGiftCardProducts() {
         title: "Engraved Gift Card",
         description: "A beautifully engraved physical gift card. Perfect for special occasions! Customize with your own message. This gift card does not expire and has no fees.",
         handle: "engraved-gift-card",
-        status: "published",
+        status: ProductStatus.PUBLISHED,
         metadata: {
             is_gift_card: true,
             gift_card_type: "physical",

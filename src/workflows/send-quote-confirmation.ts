@@ -43,6 +43,6 @@ export const sendQuoteConfirmationWorkflow = createWorkflow(
                 quantity: input.quantity,
                 product_type: input.product_type,
             },
-        })
+        }])
     }
 )

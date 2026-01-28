@@ -11,7 +11,7 @@ type WorkflowInput = {
 export const sendProofNotificationWorkflow = createWorkflow(
     "send-proof-notification",
     (input: WorkflowInput) => {
-        sendNotificationsStep({
+        sendNotificationsStep([{
             to: input.customer_email,
             channel: "email",
             content: {
@@ -47,6 +47,6 @@ export const sendProofNotificationWorkflow = createWorkflow(
                 order_id: input.order_id,
                 proof_url: input.proof_url,
             },
-        })
+        }])
     }
 )

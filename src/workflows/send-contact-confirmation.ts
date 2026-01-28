@@ -10,7 +10,7 @@ type WorkflowInput = {
 export const sendContactConfirmationWorkflow = createWorkflow(
     "send-contact-confirmation",
     (input: WorkflowInput) => {
-        sendNotificationsStep({
+        sendNotificationsStep([{
             to: input.email,
             channel: "email",
             content: {
@@ -36,6 +36,6 @@ export const sendContactConfirmationWorkflow = createWorkflow(
                 name: input.name,
                 subject: input.subject,
             },
-        })
+        }])
     }
 )

@@ -5,20 +5,20 @@ import {
 import { GIFT_CARD_MODULE } from "../modules/gift-card"
 import GiftCardModuleService from "../modules/gift-card/service"
 import { ORDER_PROOF_MODULE } from "../modules/order-proof"
+import OrderProofModuleService from "../modules/order-proof/service"
 
 /**
  * Subscriber that generates gift cards when gift card products are purchased
  * Listens to order.placed event
  */
 export default async function generateGiftCardsSubscriber({
-    data,
-    eventName,
+    event: { data },
     container,
-}: SubscriberArgs<Record<string, any>>) {
+}: SubscriberArgs<{ id: string }>) {
     const giftCardService = container.resolve<GiftCardModuleService>(
         GIFT_CARD_MODULE
     )
-    const orderService = container.resolve("orderService")
+    const orderService = container.resolve<{ retrieve: (id: string, options?: any) => Promise<any> }>("orderService")
 
     try {
         // Retrieve the order with items and product information
@@ -50,7 +50,7 @@ export default async function generateGiftCardsSubscriber({
             const value = item.unit_price || Math.round((item.total || 0) / (item.quantity || 1))
 
             // Create gift card for each quantity
-            const createdGiftCards = []
+            const createdGiftCards: any[] = []
             for (let i = 0; i < (item.quantity || 1); i++) {
                 const giftCard = await giftCardService.createGiftCard({
                     value,
@@ -69,7 +69,7 @@ export default async function generateGiftCardsSubscriber({
 
             // For digital gift cards, send email with code
             if (giftCardType === "digital") {
-                const { sendGiftCardEmailWorkflow } = await import("../workflows/send-gift-card-email")
+                const { sendGiftCardEmailWorkflow } = await import("../workflows/send-gift-card-email.js")
                 
                 for (const giftCard of createdGiftCards) {
                     try {

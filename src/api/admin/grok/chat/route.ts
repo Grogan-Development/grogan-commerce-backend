@@ -1,6 +1,7 @@
 import { MedusaRequest, MedusaResponse } from '@medusajs/framework/http';
 import GrokService from '../../../../services/grok-service';
 import { Logger } from '@medusajs/framework/types';
+import { ContainerRegistrationKeys } from '@medusajs/framework/utils';
 
 interface GrokChatRequestBody {
   message?: string;

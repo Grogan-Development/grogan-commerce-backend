@@ -330,7 +330,7 @@ export default async function uploadProducts({
 
     try {
       // Check if collection exists
-      const existingCollections = await query.graph({
+      const existingCollectionsResult = await query.graph({
         entity: "product_collection",
         fields: ["id", "title", "handle"],
         filters: {
@@ -338,7 +338,7 @@ export default async function uploadProducts({
         },
       });
 
-      if (existingCollections.length > 0) {
+      if (existingCollectionsResult.data.length > 0) {
         collectionMap.set(family, existingCollections[0].id);
         logger.info(`   ✓ Collection exists: ${family}`);
       } else {
@@ -373,7 +373,7 @@ export default async function uploadProducts({
       logger.info(`\n📦 Processing product: ${group.productName}`);
 
       // Check if product exists
-      const existingProducts = await query.graph({
+      const existingProductsResult = await query.graph({
         entity: "product",
         fields: ["id", "title", "handle"],
         filters: {
@@ -381,7 +381,7 @@ export default async function uploadProducts({
         },
       });
 
-      const existingProduct = existingProducts.length > 0 ? existingProducts[0] : null;
+      const existingProduct = existingProductsResult.data.length > 0 ? existingProductsResult.data[0] : null;
 
       // Upload images (use main image from first variant, or gallery images)
       const imageUrls: string[] = [];
@@ -448,7 +448,7 @@ export default async function uploadProducts({
           input: {
             selector: { id: existingProduct.id },
             update: {
-              title: generateProductTitle(group.productFamily, group.productName),
+              title: group.productName,
               description: group.description,
               images: imageUrls.map((url) => ({ url })),
             },

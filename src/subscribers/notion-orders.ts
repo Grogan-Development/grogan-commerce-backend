@@ -6,13 +6,11 @@ import { NOTION_MODULE } from "../modules/notion"
 import NotionService from "../services/notion"
 
 export default async function notionOrderSubscriber({
-    data,
-    eventName,
+    event: { data },
     container,
-    pluginOptions,
-}: SubscriberArgs<Record<string, any>>) {
+}: SubscriberArgs<{ id: string }>) {
     const notionService = container.resolve<NotionService>(NOTION_MODULE)
-    const orderService = container.resolve("orderService")
+    const orderService = container.resolve<{ retrieve: (id: string, options?: any) => Promise<any> }>("orderService")
 
     const order = await orderService.retrieve(data.id, {
         relations: ["items", "shipping_address"],
