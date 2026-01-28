@@ -14,13 +14,14 @@ type QueryParams = {
 export async function GET(
     req: MedusaRequest<unknown, QueryParams>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { customer_id } = req.query as QueryParams
 
     if (!customer_id) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "customer_id is required",
         })
+        return
     }
 
     const giftCardService = req.scope.resolve<GiftCardModuleService>(
@@ -30,14 +31,14 @@ export async function GET(
     try {
         const balance = await giftCardService.getStoreCredit(customer_id)
 
-        return res.json({
+        res.json({
             customer_id,
             balance,
             currency_code: "usd",
         })
     } catch (error) {
         console.error("Error fetching store credit:", error)
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to fetch store credit",
         })
     }
