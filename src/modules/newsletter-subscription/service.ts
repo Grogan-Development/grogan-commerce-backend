@@ -54,7 +54,8 @@ class NewsletterSubscriptionModuleService extends MedusaService({
             return null
         }
 
-        return await this.updateNewsletterSubscriptions(existing.id, {
+        return await this.updateNewsletterSubscriptions({
+            id: existing.id,
             status: "unsubscribed",
             unsubscribed_at: new Date(),
         })

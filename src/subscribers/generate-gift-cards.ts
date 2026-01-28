@@ -98,7 +98,7 @@ export default async function generateGiftCardsSubscriber({
             // For physical gift cards, create order proof for engraving approval
             if (giftCardType === "physical" && engravingText) {
                 try {
-                    const orderProofService = container.resolve(ORDER_PROOF_MODULE)
+                    const orderProofService = container.resolve<OrderProofModuleService>(ORDER_PROOF_MODULE)
                     if (orderProofService) {
                         // Create order proof for physical gift card engraving
                         await orderProofService.createOrderProofs({

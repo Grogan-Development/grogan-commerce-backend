@@ -1,11 +1,12 @@
 import { TransactionBaseService } from "@medusajs/medusa"
 import { Client } from "@notionhq/client"
+import { MedusaContainer } from "@medusajs/framework/types"
 
 class NotionService extends TransactionBaseService {
     protected notion: Client
     protected databaseId: string
 
-    constructor(container) {
+    constructor(container: MedusaContainer) {
         super(container)
         this.notion = new Client({
             auth: process.env.NOTION_API_KEY,

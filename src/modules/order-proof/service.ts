@@ -32,7 +32,8 @@ class OrderProofModuleService extends MedusaService({
         const existing = await this.findByOrderId(data.order_id)
         
         if (existing) {
-            return await this.updateOrderProofs(existing.id, {
+            return await this.updateOrderProofs({
+                id: existing.id,
                 proof_image_url: data.proof_image_url,
                 status: data.status || existing.status,
                 revision_count: data.status === "revision_requested" 
@@ -59,7 +60,8 @@ class OrderProofModuleService extends MedusaService({
      * Approve proof
      */
     async approveProof(proofId: string) {
-        return await this.updateOrderProofs(proofId, {
+        return await this.updateOrderProofs({
+            id: proofId,
             status: "approved",
         })
     }
@@ -69,7 +71,8 @@ class OrderProofModuleService extends MedusaService({
      */
     async requestRevision(proofId: string, customerNotes?: string) {
         const proof = await this.retrieveOrderProof(proofId)
-        return await this.updateOrderProofs(proofId, {
+        return await this.updateOrderProofs({
+            id: proofId,
             status: "revision_requested",
             revision_count: proof.revision_count + 1,
             customer_notes: customerNotes,

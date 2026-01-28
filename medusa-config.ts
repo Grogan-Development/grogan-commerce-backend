@@ -37,6 +37,9 @@ const modules: any[] = [
   {
     resolve: "./src/modules/gift-card",
   },
+  {
+    resolve: "./src/modules/notion",
+  },
 ]
 
 // Note: Redis Workflow Engine is automatically configured by Medusa Cloud

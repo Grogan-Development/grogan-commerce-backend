@@ -15,7 +15,7 @@ export async function POST(
   req: MedusaRequest<GrokChatRequestBody>,
   res: MedusaResponse
 ): Promise<void> {
-  const logger: Logger = req.scope.resolve('logger');
+  const logger: Logger = req.scope.resolve(ContainerRegistrationKeys.LOGGER);
   const grokService = new GrokService({ logger });
 
   try {

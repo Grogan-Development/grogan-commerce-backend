@@ -1,15 +1,17 @@
-import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
+import { AuthenticatedMedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { ORDER_PROOF_MODULE } from "../../../modules/order-proof"
 import OrderProofModuleService from "../../../modules/order-proof/service"
+import { Modules } from "@medusajs/framework/utils"
 
 /**
  * Store API route for customers to view and approve proofs
  */
 export async function GET(
-    req: MedusaRequest,
+    req: AuthenticatedMedusaRequest,
     res: MedusaResponse
 ): Promise<void> {
     const orderProofService = req.scope.resolve<OrderProofModuleService>(ORDER_PROOF_MODULE)
+    const orderModuleService = req.scope.resolve(Modules.ORDER)
 
     const { order_id } = req.query
 
@@ -18,7 +20,25 @@ export async function GET(
         return
     }
 
-    // TODO: Verify customer owns this order
+    // Verify customer is authenticated
+    const customerId = req.auth_context?.actor_id
+    if (!customerId) {
+        res.status(401).json({ message: "Authentication required" })
+        return
+    }
+
+    // Verify customer owns this order
+    try {
+        const order = await orderModuleService.retrieveOrder(order_id as string)
+        if (order.customer_id !== customerId) {
+            res.status(403).json({ message: "Access denied: Order does not belong to authenticated customer" })
+            return
+        }
+    } catch (error) {
+        res.status(404).json({ message: "Order not found" })
+        return
+    }
+
     const proof = await orderProofService.findByOrderId(order_id as string)
 
     if (!proof) {
@@ -39,10 +59,11 @@ interface OrderProofActionRequestBody {
  * Store API route for customers to approve or request revision
  */
 export async function POST(
-    req: MedusaRequest<OrderProofActionRequestBody>,
+    req: AuthenticatedMedusaRequest<OrderProofActionRequestBody>,
     res: MedusaResponse
 ): Promise<void> {
     const orderProofService = req.scope.resolve<OrderProofModuleService>(ORDER_PROOF_MODULE)
+    const orderModuleService = req.scope.resolve(Modules.ORDER)
 
     const { order_id, action, customer_notes } = req.body
 
@@ -51,7 +72,25 @@ export async function POST(
         return
     }
 
-    // TODO: Verify customer owns this order
+    // Verify customer is authenticated
+    const customerId = req.auth_context?.actor_id
+    if (!customerId) {
+        res.status(401).json({ message: "Authentication required" })
+        return
+    }
+
+    // Verify customer owns this order
+    try {
+        const order = await orderModuleService.retrieveOrder(order_id)
+        if (order.customer_id !== customerId) {
+            res.status(403).json({ message: "Access denied: Order does not belong to authenticated customer" })
+            return
+        }
+    } catch (error) {
+        res.status(404).json({ message: "Order not found" })
+        return
+    }
+
     const proof = await orderProofService.findByOrderId(order_id)
 
     if (!proof) {
