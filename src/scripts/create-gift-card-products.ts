@@ -4,6 +4,7 @@
  */
 
 import { createProductsWorkflow, createProductVariantsWorkflow } from "@medusajs/medusa/core-flows"
+import { ProductStatus } from "@medusajs/framework/utils"
 
 async function createGiftCardProducts() {
     const container = global as any
@@ -21,6 +22,7 @@ async function createGiftCardProducts() {
         options: [
             {
                 title: "Amount",
+                values: ["$25", "$50", "$100", "$250", "$500"],
             },
         ],
         variants: [
@@ -75,6 +77,7 @@ async function createGiftCardProducts() {
         options: [
             {
                 title: "Amount",
+                values: ["$25", "$50", "$100", "$250", "$500"],
             },
         ],
         variants: [

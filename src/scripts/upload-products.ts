@@ -339,7 +339,7 @@ export default async function uploadProducts({
       });
 
       if (existingCollectionsResult.data.length > 0) {
-        collectionMap.set(family, existingCollections[0].id);
+        collectionMap.set(family, existingCollectionsResult.data[0].id);
         logger.info(`   ✓ Collection exists: ${family}`);
       } else {
         // Create collection
