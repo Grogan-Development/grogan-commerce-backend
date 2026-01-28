@@ -58,9 +58,10 @@ export async function POST(
     const { customer_id, design_data, product_id, name } = req.body
 
     if (!customer_id || !design_data) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "customer_id and design_data are required",
         })
+        return
     }
 
     const savedDesignService = req.scope.resolve<SavedDesignModuleService>(
@@ -91,13 +92,14 @@ export async function POST(
 export async function DELETE(
     req: MedusaRequest<unknown, { id?: string }>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { id } = req.query as { id?: string }
 
     if (!id) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "id is required",
         })
+        return
     }
 
     const savedDesignService = req.scope.resolve<SavedDesignModuleService>(
@@ -106,10 +108,10 @@ export async function DELETE(
 
     try {
         await savedDesignService.deleteSavedDesigns(id)
-        return res.status(204).send()
+        res.status(204).send()
     } catch (error) {
         console.error("Error deleting saved design:", error)
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to delete saved design",
         })
     }

@@ -57,9 +57,10 @@ export async function POST(
     const { customer_id, product_id, variant_id } = req.body
 
     if (!customer_id || !product_id) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "customer_id and product_id are required",
         })
+        return
     }
 
     const wishlistService = req.scope.resolve<WishlistModuleService>(
@@ -75,10 +76,11 @@ export async function POST(
         })
 
         if (existing.length > 0) {
-            return res.status(409).json({
+            res.status(409).json({
                 message: "Item already in wishlist",
                 item: existing[0],
             })
+            return
         }
 
         const item = await wishlistService.createWishlistItems({
@@ -103,13 +105,14 @@ export async function POST(
 export async function DELETE(
     req: MedusaRequest<unknown, { id?: string }>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { id } = req.query as { id?: string }
 
     if (!id) {
-        return res.status(400).json({
+        res.status(400).json({
             message: "id is required",
         })
+        return
     }
 
     const wishlistService = req.scope.resolve<WishlistModuleService>(
@@ -118,10 +121,10 @@ export async function DELETE(
 
     try {
         await wishlistService.deleteWishlistItems(id)
-        return res.status(204).send()
+        res.status(204).send()
     } catch (error) {
         console.error("Error removing from wishlist:", error)
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to remove from wishlist",
         })
     }

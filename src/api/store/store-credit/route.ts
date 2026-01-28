@@ -49,9 +49,9 @@ export async function GET(
  * Apply store credit to a cart
  */
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<ApplyStoreCreditRequestBody>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { customer_id, cart_id, amount } = req.body
 
     if (!customer_id || amount === undefined) {
