@@ -73,9 +73,8 @@ export async function PATCH(
     } else if (status === "revision_requested") {
         await orderProofService.requestRevision(id, customer_notes)
     } else {
-        await orderProofService.updateOrderProofs({
-            id,
-            status,
+        await orderProofService.updateOrderProofs(id, {
+            status: status as "pending" | "approved" | "revision_requested" | undefined,
             customer_notes,
             admin_notes,
         })

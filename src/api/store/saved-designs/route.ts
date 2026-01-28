@@ -40,14 +40,21 @@ export async function GET(
     }
 }
 
+interface SavedDesignRequestBody {
+    customer_id: string;
+    design_data: any;
+    product_id?: string;
+    name?: string;
+}
+
 /**
  * POST /store/saved-designs
  * Create a new saved design
  */
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<SavedDesignRequestBody>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { customer_id, design_data, product_id, name } = req.body
 
     if (!customer_id || !design_data) {
@@ -68,10 +75,10 @@ export async function POST(
             name: name || "Untitled Design",
         })
 
-        return res.status(201).json({ design })
+        res.status(201).json({ design })
     } catch (error) {
         console.error("Error creating saved design:", error)
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to create saved design",
         })
     }

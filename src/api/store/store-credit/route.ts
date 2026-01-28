@@ -1,6 +1,7 @@
 import { MedusaRequest, MedusaResponse } from "@medusajs/framework/http"
 import { GIFT_CARD_MODULE } from "../../../modules/gift-card"
 import GiftCardModuleService from "../../../modules/gift-card/service"
+import { Modules } from "@medusajs/framework/utils"
 
 type QueryParams = {
     customer_id?: string
@@ -76,7 +77,7 @@ export async function POST(
         // If cart_id is provided, store the applied amount in cart metadata
         // We don't deduct the balance yet - that happens when the order is placed
         if (cart_id) {
-            const cartModuleService = req.scope.resolve("cartModuleService")
+            const cartModuleService = req.scope.resolve(Modules.CART)
             const cart = await cartModuleService.retrieveCart(cart_id)
             
             // Store applied store credit in cart metadata
@@ -94,14 +95,14 @@ export async function POST(
         // The balance will be deducted when the order is placed via subscriber
         const remainingBalance = balance - amountToApply
 
-        return res.json({
+        res.json({
             applied: amountToApply / 100, // Convert back to dollars
             remaining_balance: remainingBalance / 100,
             currency_code: "usd",
         })
     } catch (error) {
         console.error("Error applying store credit:", error)
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to apply store credit",
         })
     }

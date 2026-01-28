@@ -40,14 +40,20 @@ export async function GET(
     }
 }
 
+interface WishlistItemRequestBody {
+    customer_id: string;
+    product_id: string;
+    variant_id?: string;
+}
+
 /**
  * POST /store/wishlist
  * Add item to wishlist
  */
 export async function POST(
-    req: MedusaRequest,
+    req: MedusaRequest<WishlistItemRequestBody>,
     res: MedusaResponse
-) {
+): Promise<void> {
     const { customer_id, product_id, variant_id } = req.body
 
     if (!customer_id || !product_id) {
@@ -81,10 +87,10 @@ export async function POST(
             variant_id: variant_id || null,
         })
 
-        return res.status(201).json({ item })
+        res.status(201).json({ item })
     } catch (error) {
         console.error("Error adding to wishlist:", error)
-        return res.status(500).json({
+        res.status(500).json({
             message: "Failed to add to wishlist",
         })
     }
