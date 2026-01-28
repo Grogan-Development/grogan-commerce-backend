@@ -1,13 +1,17 @@
-import { TransactionBaseService } from "@medusajs/medusa"
 import { Client } from "@notionhq/client"
-import { MedusaContainer } from "@medusajs/framework/types"
+import { Logger } from "@medusajs/framework/types"
 
-class NotionService extends TransactionBaseService {
+type InjectedDependencies = {
+    logger?: Logger
+}
+
+class NotionService {
     protected notion: Client
     protected databaseId: string
+    protected logger?: Logger
 
-    constructor(container: MedusaContainer) {
-        super(container)
+    constructor(container: InjectedDependencies = {}) {
+        this.logger = container.logger
         this.notion = new Client({
             auth: process.env.NOTION_API_KEY,
         })

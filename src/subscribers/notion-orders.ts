@@ -2,6 +2,8 @@ import {
     type SubscriberConfig,
     type SubscriberArgs,
 } from "@medusajs/medusa"
+import { NOTION_MODULE } from "../modules/notion"
+import NotionService from "../services/notion"
 
 export default async function notionOrderSubscriber({
     data,
@@ -9,7 +11,7 @@ export default async function notionOrderSubscriber({
     container,
     pluginOptions,
 }: SubscriberArgs<Record<string, any>>) {
-    const notionService = container.resolve("notionService")
+    const notionService = container.resolve<NotionService>(NOTION_MODULE)
     const orderService = container.resolve("orderService")
 
     const order = await orderService.retrieve(data.id, {
