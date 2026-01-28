@@ -165,7 +165,8 @@ class GiftCardModuleService extends MedusaService({
         const credit = await this.getOrCreateStoreCredit(customerId, currencyCode)
         const newBalance = (credit.balance || 0) + amount
 
-        await this.updateStoreCredits(credit.id, {
+        await this.updateStoreCredits({
+            id: credit.id,
             balance: newBalance,
         })
 
@@ -184,7 +185,8 @@ class GiftCardModuleService extends MedusaService({
             const credit = await this.getOrCreateStoreCredit(customerId)
             const newBalance = (credit.balance || 0) - amountToApply
 
-            await this.updateStoreCredits(credit.id, {
+            await this.updateStoreCredits({
+                id: credit.id,
                 balance: Math.max(0, newBalance), // Ensure balance never goes negative
             })
         }
@@ -207,7 +209,8 @@ class GiftCardModuleService extends MedusaService({
 
         // Mark as abandoned
         for (const giftCard of abandoned) {
-            await this.updateGiftCards(giftCard.id, {
+            await this.updateGiftCards({
+                id: giftCard.id,
                 abandoned_at: new Date(),
             })
         }

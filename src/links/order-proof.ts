@@ -11,5 +11,6 @@ export default defineLink(
     OrderProofModule.linkable.orderProof,
     {
         isList: false, // One proof per order
+        readOnly: true,
     }
 )

@@ -7,6 +7,12 @@ type QueryParams = {
     customer_id?: string
 }
 
+interface ApplyStoreCreditRequestBody {
+    customer_id: string;
+    cart_id?: string;
+    amount: number;
+}
+
 /**
  * GET /store/store-credit?customer_id=XXX
  * Get customer's store credit balance
@@ -42,6 +48,12 @@ export async function GET(
             message: "Failed to fetch store credit",
         })
     }
+}
+
+interface ApplyStoreCreditRequestBody {
+    customer_id: string;
+    cart_id?: string;
+    amount: number;
 }
 
 /**

@@ -29,7 +29,8 @@ class NewsletterSubscriptionModuleService extends MedusaService({
                 return existing // Already subscribed
             }
             // Reactivate subscription
-            return await this.updateNewsletterSubscriptions(existing.id, {
+            return await this.updateNewsletterSubscriptions({
+                id: existing.id,
                 status: "active",
                 subscribed_at: new Date(),
                 unsubscribed_at: null,
