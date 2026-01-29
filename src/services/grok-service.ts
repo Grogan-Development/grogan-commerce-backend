@@ -1,5 +1,5 @@
 import { xai } from '@ai-sdk/xai';
-import { generateText } from 'ai';
+import { generateText, type ToolSet } from 'ai';
 import { Logger } from '@medusajs/framework/types';
 
 interface ChatMessage {
@@ -9,8 +9,9 @@ interface ChatMessage {
 
 interface ChatOptions {
   messages: ChatMessage[];
-  tools?: any[];
+  tools?: ToolSet;
   images?: string[]; // Base64 encoded images
+  system?: string;
 }
 
 interface ChatResponse {
@@ -58,19 +59,6 @@ export class GrokService {
     }
 
     try {
-      // Convert messages to prompt format
-      // For now, we'll use the last user message as the prompt
-      // In the future, we can support full conversation history
-      const lastUserMessage = options.messages
-        .filter(m => m.role === 'user')
-        .pop();
-
-      if (!lastUserMessage) {
-        throw new Error('No user message provided');
-      }
-
-      const prompt = lastUserMessage.content;
-
       // Call Grok API
       // Note: The xai provider reads API key from XAI_API_KEY environment variable
       // We set it from GROK_API_KEY for consistency
@@ -78,13 +66,20 @@ export class GrokService {
         process.env.XAI_API_KEY = this.apiKey;
       }
 
+      if (!options.messages?.length) {
+        throw new Error('No user message provided');
+      }
+
       // Note: For images, we'll need to use the messages format with content array
       // For now, supporting text-only. Images can be added later with proper format.
       const result = await generateText({
         model: xai(this.model),
-        prompt: prompt,
-        // Tools support will be added in future update
-        // tools: options.tools,
+        system: options.system,
+        messages: options.messages.map((message) => ({
+          role: message.role,
+          content: message.content,
+        })),
+        tools: options.tools,
         // Images support will be added in future update
         // The @ai-sdk/xai package supports images via the messages format
       });
