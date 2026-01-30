@@ -93,7 +93,7 @@ module.exports = defineConfig({
   },
   admin: {
     disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
-    path: "/app",
+    path: "/dashboard",
   },
   modules,
 })
