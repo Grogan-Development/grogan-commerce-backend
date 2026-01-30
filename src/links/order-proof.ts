@@ -8,9 +8,5 @@ import { defineLink } from "@medusajs/framework/utils"
  */
 export default defineLink(
     OrderModule.linkable.order,
-    OrderProofModule.linkable.orderProof,
-    {
-        isList: false, // One proof per order
-        readOnly: true,
-    }
+    OrderProofModule.linkable.orderProof
 )
