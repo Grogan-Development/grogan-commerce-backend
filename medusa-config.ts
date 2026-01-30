@@ -93,7 +93,12 @@ module.exports = defineConfig({
   },
   admin: {
     disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
-    path: "/dashboard",
+    path: "/app",
+    vite: () => ({
+      optimizeDeps: {
+        include: ["@ai-sdk/xai", "ai"],
+      },
+    }),
   },
   modules,
 })
