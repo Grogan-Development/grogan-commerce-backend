@@ -13,7 +13,8 @@
     "medusa"
   ],
   "scripts": {
-    "build": "medusa build",
+    "build": "medusa build && node scripts/build-admin.js",
+    "build:admin": "node scripts/build-admin.js",
     "predeploy": "medusa db:migrate",
     "seed": "medusa exec ./src/scripts/seed.ts",
     "upload-products": "medusa exec ./src/scripts/upload-products.ts",
